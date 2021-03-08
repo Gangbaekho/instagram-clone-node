@@ -8,7 +8,7 @@ const storySchema = new Schema(
       type: Schema.Types.ObjectId,
       required: true,
     },
-    contentUrl: {
+    contentUrls: {
       type: [String],
       required: true,
     },
