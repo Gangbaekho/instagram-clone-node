@@ -4,6 +4,8 @@ const dmController = require("../controller/dm");
 
 const router = express.Router();
 
-router.post("/", dmController.createDm);
+const isAuth = require("../middleware/isAuth");
+
+router.post("/", isAuth, dmController.createDm);
 
 module.exports = router;

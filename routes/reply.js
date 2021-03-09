@@ -4,6 +4,8 @@ const replyController = require("../controller/reply");
 
 const router = express.Router();
 
-router.post("/", replyController.createReply);
+const isAuth = require("../middleware/isAuth");
+
+router.post("/", isAuth, replyController.createReply);
 
 module.exports = router;

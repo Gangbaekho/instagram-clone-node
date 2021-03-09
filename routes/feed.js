@@ -4,6 +4,8 @@ const feedController = require("../controller/feed");
 
 const router = express.Router();
 
-router.post("/", feedController.createFeed);
+const isAuth = require("../middleware/isAuth");
+
+router.post("/", isAuth, feedController.createFeed);
 
 module.exports = router;

@@ -4,6 +4,8 @@ const activityController = require("../controller/activitiy");
 
 const router = express.Router();
 
-router.post("/", activityController.createActivity);
+const isAuth = require("../middleware/isAuth");
+
+router.post("/", isAuth, activityController.createActivity);
 
 module.exports = router;
