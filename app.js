@@ -43,4 +43,20 @@ app.use("/activity", activityRouter);
 app.use("/conversation", conversationRouter);
 app.use("/dm", dmRouter);
 
+// ERROR HANDLING MIDDLEWARE
+app.use((error, req, res, next) => {
+  switch (error.statusCode) {
+    case 401:
+      res.status(401).json({ message: "Authentication error" });
+    case 404:
+      res.status(404).json({ message: "Not found page" });
+    case 422:
+      res.status(422).json({ message: "Invalid input value" });
+    case 500:
+      res.status(500).json({ message: "Internal server error" });
+    default:
+      res.status(500).json({ message: "Internal server error" });
+  }
+  return;
+});
 mongooseConnect(app);
