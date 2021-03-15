@@ -6,7 +6,15 @@ const Feed = require("../model/feed");
 exports.createFeed = (req, res, next) => {
   const userId = req.userId;
   const content = req.body.content;
-  const contentUrl = req.body.contentUrl;
+  const image = req.file;
+
+  if (!image) {
+    const error = new Error("image not contained");
+    error.statusCode = 401;
+    throw error;
+  }
+
+  const imageUrl = image.path.replace("\\", "/");
 
   User.findOne({ _id: userId })
     .then((user) => {
@@ -18,7 +26,7 @@ exports.createFeed = (req, res, next) => {
       const feed = new Feed({
         userId: userId,
         content: content,
-        contentUrls: [contentUrl],
+        contentUrls: [imageUrl],
       });
 
       return feed.save();
