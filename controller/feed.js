@@ -49,3 +49,17 @@ exports.test = (req, res, next) => {
   console.log(myText);
   console.log(myFile);
 };
+
+exports.populateTest = (req, res, next) => {
+  Feed.findById("604f2a68eb32b80d40a8eb6b")
+    .populate("replyIds")
+    .then((feed) => {
+      res.json({ data: feed });
+    })
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
+};

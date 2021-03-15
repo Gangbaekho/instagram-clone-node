@@ -10,4 +10,6 @@ router.post("/", isAuth, feedController.createFeed);
 
 router.post("/test", feedController.test);
 
+router.get("/populate", feedController.populateTest);
+
 module.exports = router;
