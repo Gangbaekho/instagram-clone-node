@@ -8,4 +8,6 @@ const isAuth = require("../middleware/isAuth");
 
 router.post("/", isAuth, feedController.createFeed);
 
+router.post("/test", feedController.test);
+
 module.exports = router;

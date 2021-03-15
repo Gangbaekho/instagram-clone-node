@@ -1,10 +1,14 @@
 const express = require("express");
 
+// UTILS
+const uuid = require("uuid");
+
 // MONGOOSE
 const mongooseConnect = require("./util/mogooseConnect.s");
 
 // PASERS
 const bodyParser = require("body-parser");
+const multer = require("multer");
 
 // ROUTERS
 const authRouter = require("./routes/auth");
@@ -18,8 +22,33 @@ const dmRouter = require("./routes/dm");
 
 const app = express();
 
+// MULTER CONFIG
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "images");
+  },
+  fileName: (req, file, cb) => {
+    cb(null, uuid.v4() + "-" + file.originalname);
+  },
+});
+
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/jpg" ||
+    file.mimetype === "image/jpeg"
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
 // PARSERS
 app.use(bodyParser.json());
+app.use(
+  multer({ storage: fileStorage, fileFilter: fileFilter }).single("image")
+);
 
 // DEFAULT RESPONSE HEADER SETTING
 app.use((req, res, next) => {
