@@ -1,3 +1,6 @@
+// UTILS
+const path = require("path");
+
 const express = require("express");
 
 // MONGOOSE
@@ -52,6 +55,9 @@ app.use(bodyParser.json());
 app.use(
   multer({ storage: fileStorage, fileFilter: fileFilter }).single("image")
 );
+
+// STATIC FOLDER
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 // DEFAULT RESPONSE HEADER SETTING
 app.use((req, res, next) => {
