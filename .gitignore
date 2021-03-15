@@ -1,5 +1,8 @@
 # secrets
 *.s.js
+*.s.jpg
+*.s.jpeg
+*.s.png
 
 # Logs
 logs

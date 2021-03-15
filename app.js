@@ -1,8 +1,5 @@
 const express = require("express");
 
-// UTILS
-const uuid = require("uuid");
-
 // MONGOOSE
 const mongooseConnect = require("./util/mogooseConnect.s");
 
@@ -27,8 +24,14 @@ const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "images");
   },
-  fileName: (req, file, cb) => {
-    cb(null, uuid.v4() + "-" + file.originalname);
+  filename: (req, file, cb) => {
+    cb(
+      null,
+      Date.now() +
+        file.originalname.split(".")[0] +
+        ".s." +
+        file.originalname.split(".")[1]
+    );
   },
 });
 
