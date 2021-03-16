@@ -4,6 +4,7 @@ const Reply = require("../model/reply");
 
 exports.createReply = (req, res, next) => {
   const userId = req.userId;
+  const feedId = req.body.feedId;
   const content = req.body.content;
 
   let myReply;
@@ -20,7 +21,7 @@ exports.createReply = (req, res, next) => {
         userId: userId,
         userNickName: user.nickName,
         userProfileImageUrl: user.profileImageUrl,
-        feedId: "605028c52e909837a0bcf1ff",
+        feedId: feedId,
         content: content,
       });
 
@@ -28,7 +29,7 @@ exports.createReply = (req, res, next) => {
     })
     .then((reply) => {
       myReply = reply;
-      return Feed.findById({ _id: "605028c52e909837a0bcf1ff" });
+      return Feed.findById({ _id: feedId });
     })
     .then((feed) => {
       feed.replyIds.push(myReply._id.toString());
