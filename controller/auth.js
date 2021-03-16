@@ -17,6 +17,7 @@ exports.signup = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   const passwordCheck = req.body.passwordCheck;
+  const nickName = req.body.nickName;
 
   if (password !== passwordCheck) {
     const error = new Error("passwords are not equal.");
@@ -29,6 +30,7 @@ exports.signup = (req, res, next) => {
     .then((encryptedPassword) => {
       const user = new User({
         email: email,
+        nickName: nickName,
         password: encryptedPassword,
       });
 

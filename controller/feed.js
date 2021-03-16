@@ -63,3 +63,17 @@ exports.populateTest = (req, res, next) => {
       next(error);
     });
 };
+
+exports.getFeeds = (req, res, next) => {
+  Feed.find()
+    .populate("replyIds userId")
+    .then((feeds) => {
+      res.json({ message: "succes", feeds: feeds });
+    })
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
+};
