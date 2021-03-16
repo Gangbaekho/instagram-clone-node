@@ -68,8 +68,9 @@ exports.populateTest = (req, res, next) => {
 
 exports.getFeeds = (req, res, next) => {
   Feed.find()
+    .populate("replyIds")
     .then((feeds) => {
-      res.json({ message: "succes", feeds: feeds });
+      res.json({ message: "success", feeds: feeds });
     })
     .catch((error) => {
       if (!error.statusCode) {
