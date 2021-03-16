@@ -25,6 +25,8 @@ exports.createFeed = (req, res, next) => {
       }
       const feed = new Feed({
         userId: userId,
+        userNickName: user.nickName,
+        userProfileImageUrl: user.profileImageUrl,
         content: content,
         contentUrls: [imageUrl],
       });
@@ -66,7 +68,6 @@ exports.populateTest = (req, res, next) => {
 
 exports.getFeeds = (req, res, next) => {
   Feed.find()
-    .populate("replyIds userId")
     .then((feeds) => {
       res.json({ message: "succes", feeds: feeds });
     })

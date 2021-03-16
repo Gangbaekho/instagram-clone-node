@@ -18,7 +18,7 @@ const userSchema = new Schema(
     },
     profileImageUrl: {
       type: String,
-      default: "",
+      default: "undefined",
     },
   },
   {

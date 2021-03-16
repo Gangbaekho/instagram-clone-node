@@ -9,6 +9,14 @@ const feedSchema = new Schema(
       ref: "User",
       required: true,
     },
+    userNickName: {
+      type: String,
+      required: true,
+    },
+    userProfileImageUrl: {
+      type: String,
+      required: true,
+    },
     replyIds: [
       {
         type: Schema.Types.ObjectId,
