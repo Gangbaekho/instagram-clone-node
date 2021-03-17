@@ -69,6 +69,7 @@ exports.populateTest = (req, res, next) => {
 exports.getFeeds = (req, res, next) => {
   Feed.find()
     .populate("replyIds")
+    .sort({ createdAt: -1 })
     .then((feeds) => {
       res.json({ message: "success", feeds: feeds });
     })
