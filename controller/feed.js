@@ -67,11 +67,22 @@ exports.populateTest = (req, res, next) => {
 };
 
 exports.getFeeds = (req, res, next) => {
+  const userId = req.userId;
+
   Feed.find()
     .populate("replyIds")
     .sort({ createdAt: -1 })
     .then((feeds) => {
-      res.json({ message: "success", feeds: feeds });
+      res.json({
+        message: "success",
+        feeds: feeds.map((feed) => {
+          isHeartClicked = feed.likeUserIds.indexOf(userId) > -1;
+          return {
+            ...feed._doc,
+            isHeartClicked: isHeartClicked,
+          };
+        }),
+      });
     })
     .catch((error) => {
       if (!error.statusCode) {
@@ -94,6 +105,7 @@ exports.createLike = (req, res, next) => {
       }
 
       feed.likeCount++;
+      feed.likeUserIds.push(userId);
       return feed.save();
     })
     .then((feed) => {

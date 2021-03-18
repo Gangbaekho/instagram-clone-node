@@ -59,6 +59,7 @@ exports.createLike = (req, res, next) => {
       }
 
       reply.likeCount++;
+      reply.likeUserIds.push(userId);
       return reply.save();
     })
     .then((reply) => {

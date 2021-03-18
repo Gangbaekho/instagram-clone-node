@@ -12,7 +12,7 @@ router.post("/test", feedController.test);
 
 router.get("/populate", feedController.populateTest);
 
-router.get("/", feedController.getFeeds);
+router.get("/", isAuth, feedController.getFeeds);
 
 router.post("/like", isAuth, feedController.createLike);
 
