@@ -80,3 +80,29 @@ exports.getFeeds = (req, res, next) => {
       next(error);
     });
 };
+
+exports.createLike = (req, res, next) => {
+  const userId = req.userId;
+  const feedId = req.body.feedId;
+
+  Feed.findOne({ _id: feedId })
+    .then((feed) => {
+      if (!feed) {
+        const error = new Error("Feed not found");
+        error.statusCode = 500;
+        throw error;
+      }
+
+      feed.likeCount++;
+      return feed.save();
+    })
+    .then((feed) => {
+      res.json({ message: "like increase success" });
+    })
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
+};

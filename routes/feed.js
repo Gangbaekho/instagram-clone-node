@@ -14,4 +14,6 @@ router.get("/populate", feedController.populateTest);
 
 router.get("/", feedController.getFeeds);
 
+router.post("/like", isAuth, feedController.createLike);
+
 module.exports = router;

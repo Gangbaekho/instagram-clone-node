@@ -62,7 +62,10 @@ app.use("/images", express.static(path.join(__dirname, "images")));
 // DEFAULT RESPONSE HEADER SETTING
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Controll-Allow-Methods", "GET,POST,PUT,DELETE,PATCH");
+  res.setHeader(
+    "Access-Controll-Allow-Methods",
+    "GET,POST,PUT,DELETE,PATCH,OPTIONS"
+  );
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
   if (req.method === "OPTIONS") {
