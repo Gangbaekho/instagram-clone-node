@@ -87,7 +87,7 @@ exports.decreaseLike = (req, res, next) => {
 
       reply.likeCount--;
       const filteredLikeUserIds = reply.likeUserIds.filter((likeUserId) => {
-        return likeUserId.toString !== userId;
+        return likeUserId.toString() !== userId;
       });
       reply.likeUserIds = filteredLikeUserIds;
       return reply.save();
