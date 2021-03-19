@@ -46,7 +46,7 @@ exports.createReply = (req, res, next) => {
     });
 };
 
-exports.createLike = (req, res, next) => {
+exports.increaseLike = (req, res, next) => {
   const userId = req.userId;
   const replyId = req.body.replyId;
 
@@ -64,6 +64,36 @@ exports.createLike = (req, res, next) => {
     })
     .then((reply) => {
       res.json({ message: "reply like increase success" });
+    })
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
+};
+
+exports.decreaseLike = (req, res, next) => {
+  const userId = req.userId;
+  const replyId = req.body.replyId;
+
+  Reply.findOne({ _id: replyId })
+    .then((reply) => {
+      if (!reply) {
+        const error = new Error("reply not found.");
+        error.statusCode = 500;
+        throw error;
+      }
+
+      reply.likeCount--;
+      const filteredLikeUserIds = reply.likeUserIds.filter((likeUserId) => {
+        return likeUserId.toString !== userId;
+      });
+      reply.likeUserIds = filteredLikeUserIds;
+      return reply.save();
+    })
+    .then((reply) => {
+      res.json({ message: "reply like decrease success" });
     })
     .catch((error) => {
       if (!error.statusCode) {
