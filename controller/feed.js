@@ -92,7 +92,7 @@ exports.getFeeds = (req, res, next) => {
     });
 };
 
-exports.createLike = (req, res, next) => {
+exports.increaseLike = (req, res, next) => {
   const userId = req.userId;
   const feedId = req.body.feedId;
 
@@ -110,6 +110,36 @@ exports.createLike = (req, res, next) => {
     })
     .then((feed) => {
       res.json({ message: "like increase success" });
+    })
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
+};
+
+exports.decreaseLike = (req, res, next) => {
+  const userId = req.userId;
+  const feedId = req.body.feedId;
+
+  Feed.findOne({ _id: feedId })
+    .then((feed) => {
+      if (!feed) {
+        const error = new Error("Feed not found");
+        error.statusCode = 500;
+        throw error;
+      }
+
+      feed.likeCount--;
+      const filteredLikeUserIds = feed.likeUserIds.filter((likeUserId) => {
+        return likeUserId.toString() !== userId.toString();
+      });
+      feed.likeUserIds = filteredLikeUserIds;
+      return feed.save();
+    })
+    .then((feed) => {
+      res.json({ message: "like decrease success" });
     })
     .catch((error) => {
       if (!error.statusCode) {
