@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const User = require("../model/user");
 const Feed = require("../model/feed");
+const Reply = require("../model/reply");
 
 exports.createFeed = (req, res, next) => {
   const userId = req.userId;
@@ -141,6 +142,33 @@ exports.decreaseLike = (req, res, next) => {
     })
     .then((feed) => {
       res.json({ message: "like decrease success" });
+    })
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
+};
+
+exports.testGetFeeds = (req, res, next) => {
+  const userId = "123";
+
+  Feed.find()
+    .populate({ path: "replyIds", perDocumentLimit: 2 })
+    .sort({ createdAt: -1 })
+    .then((feeds) => {
+      res.json({
+        message: "success",
+        feeds: feeds.map((feed) => {
+          isHeartClicked = feed.likeUserIds.indexOf(userId) > -1;
+          return {
+            ...feed._doc,
+            isHeartClicked: isHeartClicked,
+            replyTotalCount: feed.replyIds.length,
+          };
+        }),
+      });
     })
     .catch((error) => {
       if (!error.statusCode) {
