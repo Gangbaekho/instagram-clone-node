@@ -80,6 +80,7 @@ exports.getFeeds = (req, res, next) => {
           return {
             ...feed._doc,
             isHeartClicked: isHeartClicked,
+            replyTotalCount: feed.replyIds.length,
           };
         }),
       });
