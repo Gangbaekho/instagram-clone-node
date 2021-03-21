@@ -33,6 +33,7 @@ exports.createReply = (req, res, next) => {
     })
     .then((feed) => {
       feed.replyIds.push(myReply._id.toString());
+      feed.replyCount++;
       return feed.save();
     })
     .then((result) => {
