@@ -82,7 +82,6 @@ exports.getFeeds = (req, res, next) => {
           return {
             ...feed._doc,
             isHeartClicked: isHeartClicked,
-            replyTotalCount: feed.replyIds.length,
           };
         }),
       });
@@ -152,15 +151,34 @@ exports.decreaseLike = (req, res, next) => {
     });
 };
 
-exports.testGetFeeds = (req, res, next) => {
-  const userId = "123";
+exports.getFeedDetail = (req, res, next) => {
+  const userId = "605040bd1289fc3284588fcd";
+  const feedId = req.params.feedId;
 
-  let loadedFeeds;
+  Feed.findOne({ _id: feedId })
+    .populate({ path: "replyIds", perDocumentLimit: 10 })
+    .then((feed) => {
+      if (!feed) {
+        const error = new Error("Feed not found.");
+        error.statusCode = 404;
+        throw error;
+      }
 
-  Feed.find()
-    .sort({ createdAt: -1 })
-    .then((feeds) => {
-      loadedFeeds = feeds;
+      isHeartClicked = feed.likeUserIds.indexOf(userId) > -1;
+      const filteredFeed = {
+        ...feed._doc,
+        isHeartClicked: isHeartClicked,
+      };
+
+      res.json({
+        message: "success",
+        feed: filteredFeed,
+      });
     })
-    .catch();
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
 };
