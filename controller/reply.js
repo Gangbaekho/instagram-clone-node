@@ -119,3 +119,27 @@ exports.getRepliesTest = (req, res, next) => {
       next(error);
     });
 };
+
+exports.getMoreReplies = (req, res, next) => {
+  const feedId = req.body.feedId;
+  const skip = req.body.skip;
+  const limit = 10;
+
+  Reply.find({ feedId: feedId })
+    .skip(skip)
+    .limit(limit)
+    .then((replies) => {
+      if (!replies) {
+        const error = new Error("There is no more reply to send");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.json({ message: "success", replies: replies });
+    })
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
+};
