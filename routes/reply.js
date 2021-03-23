@@ -14,4 +14,6 @@ router.post("/like/decrease", isAuth, replyController.decreaseLike);
 
 router.post("/more", replyController.getMoreReplies);
 
+router.post("/rereply", isAuth, replyController.createRereply);
+
 module.exports = router;

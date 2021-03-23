@@ -143,3 +143,88 @@ exports.getMoreReplies = (req, res, next) => {
       next(error);
     });
 };
+
+exports.createRereply = (req, res, next) => {
+  const userId = req.userId;
+  const replyId = req.body.replyId;
+  const content = req.body.content;
+
+  let loadedUser;
+  let loadedReply;
+  User.findOne({ _id: userId })
+    .then((user) => {
+      if (!user) {
+        const error = new Error("User not found");
+        error.statusCode = 401;
+        throw error;
+      }
+      loadedUser = user;
+      return Reply.findOne({ _id: replyId });
+    })
+    .then((reply) => {
+      if (!reply) {
+        const error = new Error("Reply not found");
+        error.statusCode = 404;
+        throw error;
+      }
+
+      loadedReply = reply;
+
+      const rereply = new Reply({
+        userId: userId,
+        userNickName: loadedUser.nickName,
+        userProfileImageUrl: loadedUser.profileImageUrl,
+        content: content,
+      });
+
+      return rereply.save();
+    })
+    .then((rereply) => {
+      loadedReply.rereplyIds.push(rereply._id);
+      return loadedReply.save();
+    })
+    .then((result) => {
+      res.json({ message: "rereply add success!" });
+    })
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
+
+  // let loadedReply;
+
+  // Reply.findOne({ _id: replyId })
+  //   .then((reply) => {
+  //     if (!reply) {
+  //       const error = new Error("Reply not found");
+  //       error.statusCode = 404;
+  //       throw error;
+  //     }
+
+  //     loadedReply = reply;
+
+  //     const rereply = new Reply({
+  //       userId: userId,
+  //       userNickName: user.nickName,
+  //       userProfileImageUrl: user.profileImageUrl,
+  //       content: content,
+  //     });
+
+  //     return rereply.save();
+  //   })
+  //   .then((rereply) => {
+  //     loadedReply.rereplyIds.push(rereply._id);
+  //     return loadedReply.save();
+  //   })
+  //   .then((result) => {
+  //     res.json({ message: "rereply add success!" });
+  //   })
+  //   .catch((error) => {
+  //     if (!error.statusCode) {
+  //       error.statusCode = 500;
+  //     }
+  //     next(error);
+  //   });
+};

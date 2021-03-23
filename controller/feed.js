@@ -152,7 +152,7 @@ exports.decreaseLike = (req, res, next) => {
 };
 
 exports.getFeedDetail = (req, res, next) => {
-  const userId = "605040bd1289fc3284588fcd";
+  const userId = req.userId;
   const feedId = req.params.feedId;
 
   Feed.findOne({ _id: feedId })
