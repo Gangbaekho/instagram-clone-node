@@ -103,3 +103,19 @@ exports.decreaseLike = (req, res, next) => {
       next(error);
     });
 };
+
+exports.getRepliesTest = (req, res, next) => {
+  const feedId = req.params.feedId;
+
+  Reply.find({ feedId: feedId })
+    .sort({ _id: -1 })
+    .then((replies) => {
+      res.json({ message: "success", replies: replies });
+    })
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
+};

@@ -12,4 +12,6 @@ router.post("/like/increase", isAuth, replyController.increaseLike);
 
 router.post("/like/decrease", isAuth, replyController.decreaseLike);
 
+router.get("/feed/:feedId", replyController.getRepliesTest);
+
 module.exports = router;
