@@ -16,4 +16,6 @@ router.post("/more", replyController.getMoreReplies);
 
 router.post("/rereply", isAuth, replyController.createRereply);
 
+router.get("/:replyId/rereply", replyController.getRereplies);
+
 module.exports = router;

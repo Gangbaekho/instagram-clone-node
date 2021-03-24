@@ -174,13 +174,14 @@ exports.createRereply = (req, res, next) => {
         userId: userId,
         userNickName: loadedUser.nickName,
         userProfileImageUrl: loadedUser.profileImageUrl,
+        parentReplyId: reply._id,
         content: content,
       });
 
       return rereply.save();
     })
     .then((rereply) => {
-      loadedReply.rereplyIds.push(rereply._id);
+      loadedReply.rereplyCount++;
       return loadedReply.save();
     })
     .then((result) => {
@@ -192,39 +193,22 @@ exports.createRereply = (req, res, next) => {
       }
       next(error);
     });
+};
 
-  // let loadedReply;
+exports.getRereplies = (req, res, next) => {
+  const parentReplyId = req.params.replyId;
+  const skipTimes = req.body.skipTimes || 0;
 
-  // Reply.findOne({ _id: replyId })
-  //   .then((reply) => {
-  //     if (!reply) {
-  //       const error = new Error("Reply not found");
-  //       error.statusCode = 404;
-  //       throw error;
-  //     }
-
-  //     loadedReply = reply;
-
-  //     const rereply = new Reply({
-  //       userId: userId,
-  //       userNickName: user.nickName,
-  //       userProfileImageUrl: user.profileImageUrl,
-  //       content: content,
-  //     });
-
-  //     return rereply.save();
-  //   })
-  //   .then((rereply) => {
-  //     loadedReply.rereplyIds.push(rereply._id);
-  //     return loadedReply.save();
-  //   })
-  //   .then((result) => {
-  //     res.json({ message: "rereply add success!" });
-  //   })
-  //   .catch((error) => {
-  //     if (!error.statusCode) {
-  //       error.statusCode = 500;
-  //     }
-  //     next(error);
-  //   });
+  Reply.find({ parentReplyId: parentReplyId })
+    .skip(skipTimes * 5)
+    .limit(5)
+    .then((replies) => {
+      res.json({ message: "success", replies: replies });
+    })
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
 };

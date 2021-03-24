@@ -21,12 +21,20 @@ const replySchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Feed",
     },
+    parentReplyId: {
+      type: Schema.Types.ObjectId,
+      ref: "Reply",
+    },
     rereplyIds: [
       {
         type: Schema.Types.ObjectId,
         ref: "Reply",
       },
     ],
+    rereplyCount: {
+      type: Number,
+      default: 0,
+    },
     content: {
       type: String,
       required: true,
