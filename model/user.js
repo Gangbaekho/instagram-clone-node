@@ -12,6 +12,9 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    userName: {
+      type: String,
+    },
     password: {
       type: String,
       required: true,
@@ -19,6 +22,14 @@ const userSchema = new Schema(
     profileImageUrl: {
       type: String,
       default: "images/default_user.s.png",
+    },
+    followingCount: {
+      type: Number,
+      default: 0,
+    },
+    followedCount: {
+      type: Number,
+      default: 0,
     },
   },
   {

@@ -20,7 +20,10 @@ exports.createUser = (req, res, next) => {
 exports.findUsers = (req, res, next) => {
   const nickName = req.params.nickName;
   // db.users.findOne({"username" : {$regex : ".*son.*"}});
-  User.find({ nickName: { $regex: `.*${nickName}.*` } })
+  User.find(
+    { nickName: { $regex: `.*${nickName}.*` } },
+    { nickName: 1, profileImageUrl: 1 }
+  )
     .limit(20)
     .then((users) => {
       if (!users) {
