@@ -16,3 +16,22 @@ exports.createUser = (req, res, next) => {
       console.log("error");
     });
 };
+
+exports.findUsers = (req, res, next) => {
+  const nickName = req.params.nickName;
+  // db.users.findOne({"username" : {$regex : ".*son.*"}});
+  User.find({ nickName: { $regex: `.*${nickName}.*` } })
+    .limit(20)
+    .then((users) => {
+      if (!users) {
+        res.json({ message: "not found", users: [] });
+      }
+      res.json({ message: "success finding users", users: users });
+    })
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
+};

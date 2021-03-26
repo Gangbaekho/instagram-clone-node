@@ -25,12 +25,16 @@ const replySchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Reply",
     },
-    rereplyIds: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Reply",
-      },
-    ],
+    // rereplyIds: [
+    //   {
+    //     type: Schema.Types.ObjectId,
+    //     ref: "Reply",
+    //   },
+    // ],
+    rereplyIds: {
+      type: Array,
+      default: [],
+    },
     rereplyCount: {
       type: Number,
       default: 0,

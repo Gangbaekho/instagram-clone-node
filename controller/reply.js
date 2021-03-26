@@ -197,10 +197,10 @@ exports.createRereply = (req, res, next) => {
 
 exports.getRereplies = (req, res, next) => {
   const parentReplyId = req.params.replyId;
-  const skipTimes = req.body.skipTimes || 0;
+  const skip = req.body.skip || 0;
 
   Reply.find({ parentReplyId: parentReplyId })
-    .skip(skipTimes * 5)
+    .skip(skip)
     .limit(5)
     .then((replies) => {
       res.json({ message: "success", replies: replies });
