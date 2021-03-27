@@ -19,6 +19,7 @@ const replyrRouter = require("./routes/reply");
 const activityRouter = require("./routes/activity");
 const conversationRouter = require("./routes/conversation");
 const dmRouter = require("./routes/dm");
+const followRouter = require("./routes/follow");
 
 const app = express();
 
@@ -83,6 +84,7 @@ app.use("/reply", replyrRouter);
 app.use("/activity", activityRouter);
 app.use("/conversation", conversationRouter);
 app.use("/dm", dmRouter);
+app.use("/follow", followRouter);
 
 // ERROR HANDLING MIDDLEWARE
 app.use((error, req, res, next) => {

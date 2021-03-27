@@ -2,14 +2,14 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const followSchema = new Schema({
-  follower: {
+  followerId: {
     type: Schema.Types.ObjectId,
     required: true,
   },
-  followee: {
+  followeeId: {
     type: Schema.Types.ObjectId,
     required: true,
   },
 });
 
-export default mongoose.model("Follow", followSchema);
+module.exports = mongoose.model("Follow", followSchema);

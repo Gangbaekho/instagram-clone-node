@@ -22,7 +22,7 @@ exports.findUsers = (req, res, next) => {
   // db.users.findOne({"username" : {$regex : ".*son.*"}});
   User.find(
     { nickName: { $regex: `.*${nickName}.*` } },
-    { nickName: 1, profileImageUrl: 1 }
+    { nickName: 1, profileImageUrl: 1, userName: 1 }
   )
     .limit(20)
     .then((users) => {
