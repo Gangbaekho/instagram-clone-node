@@ -1,7 +1,6 @@
-const { json } = require("body-parser");
 const Follow = require("../model/follow");
 
-exports.addFollowReplation = (req, res, next) => {
+exports.addFollowRelationship = (req, res, next) => {
   const userId = req.userId;
   const followeeId = req.body.followeeId;
 
