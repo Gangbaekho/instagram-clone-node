@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 const User = require("../model/user");
 const Feed = require("../model/feed");
+const Follow = require("../model/follow");
 const Reply = require("../model/reply");
-const feed = require("../model/feed");
 
 exports.createFeed = (req, res, next) => {
   const userId = req.userId;
@@ -174,6 +174,27 @@ exports.getFeedDetail = (req, res, next) => {
         message: "success",
         feed: filteredFeed,
       });
+    })
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
+};
+
+exports.testFeeds = (req, res, next) => {
+  const userId = req.userId;
+
+  Follow.find({ followerId: userId })
+    .then((followInfos) => {
+      const followeeList = followInfos.map(
+        (followInfo) => followInfo.followeeId
+      );
+      return Feed.find({ userId: { $in: followeeList } });
+    })
+    .then((feeds) => {
+      res.json({ message: "success", feeds: feeds });
     })
     .catch((error) => {
       if (!error.statusCode) {
