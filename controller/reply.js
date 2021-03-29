@@ -1,12 +1,15 @@
 const User = require("../model/user");
 const Feed = require("../model/feed");
 const Reply = require("../model/reply");
+const Activity = require("../model/activity");
+const feed = require("../model/feed");
 
 exports.createReply = (req, res, next) => {
   const userId = req.userId;
   const feedId = req.body.feedId;
   const content = req.body.content;
 
+  let loadedFeed;
   let myReply;
 
   User.findOne({ _id: userId })
@@ -32,9 +35,19 @@ exports.createReply = (req, res, next) => {
       return Feed.findById({ _id: feedId });
     })
     .then((feed) => {
+      loadedFeed = feed;
       feed.replyIds.push(myReply._id.toString());
       feed.replyCount++;
       return feed.save();
+    })
+    .then((result) => {
+      const activity = new Activity({
+        whoId: userId,
+        whomId: loadedFeed.userId.toString(),
+        activityType: "reply",
+      });
+
+      return activity.save();
     })
     .then((result) => {
       res.json({ message: "reply add success" });
