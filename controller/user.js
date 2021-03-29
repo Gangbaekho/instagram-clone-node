@@ -1,4 +1,5 @@
 const User = require("../model/user");
+const Follow = require("../model/follow");
 
 exports.createUser = (req, res, next) => {
   const user = new User({
@@ -10,16 +11,25 @@ exports.createUser = (req, res, next) => {
   user
     .save()
     .then((user) => {
-      console.log("Success");
+      const follow = new Follow({
+        followerId: user._id.toString(),
+        followeeId: user._id.toString(),
+      });
+      return follow.save();
+    })
+    .then((result) => {
+      res.json({ message: "success user create" });
     })
     .catch((error) => {
-      console.log("error");
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
     });
 };
 
 exports.findUsers = (req, res, next) => {
   const nickName = req.params.nickName;
-  // db.users.findOne({"username" : {$regex : ".*son.*"}});
   User.find(
     { nickName: { $regex: `.*${nickName}.*` } },
     { nickName: 1, profileImageUrl: 1, userName: 1 }

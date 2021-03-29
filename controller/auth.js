@@ -1,4 +1,5 @@
 const User = require("../model/user");
+const Follow = require("../model/follow");
 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -35,6 +36,13 @@ exports.signup = (req, res, next) => {
       });
 
       return user.save();
+    })
+    .then((user) => {
+      const follow = new Follow({
+        followerId: user._id.toString(),
+        followeeId: user._id.toString(),
+      });
+      return follow.save();
     })
     .then((result) => {
       res.status(200).json({
