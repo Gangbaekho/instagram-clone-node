@@ -1,3 +1,5 @@
+const { FOLLOW } = require("../constant/activityType");
+
 const Follow = require("../model/follow");
 const Activity = require("../model/activity");
 
@@ -13,7 +15,7 @@ exports.addFollowRelationship = (req, res, next) => {
       const activity = new Activity({
         whoId: userId,
         whomId: followeeId,
-        activityType: "follow",
+        activityType: FOLLOW,
       });
       return activity.save();
     })

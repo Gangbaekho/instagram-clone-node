@@ -1,3 +1,5 @@
+const { REPLY } = require("../constant/activityType");
+
 const User = require("../model/user");
 const Feed = require("../model/feed");
 const Reply = require("../model/reply");
@@ -44,7 +46,9 @@ exports.createReply = (req, res, next) => {
       const activity = new Activity({
         whoId: userId,
         whomId: loadedFeed.userId.toString(),
-        activityType: "reply",
+        activityType: REPLY,
+        feedId: feedId,
+        replyId: myReply._id.toString(),
       });
 
       return activity.save();

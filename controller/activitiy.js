@@ -1,17 +1,18 @@
+const { json } = require("body-parser");
 const Activity = require("../model/activity");
 
-exports.createActivity = (req, res, next) => {
-  const activity = new Activity({
-    userId: "60459cb019ffd74380d5b4ca",
-    replyId: "6045a942a22eba2be036836f",
-  });
+exports.getActivities = (req, res, next) => {
+  const userId = req.userId;
 
-  activity
-    .save()
-    .then((result) => {
-      console.log("Acitivity insert success");
+  Activity.find({ whomId: userId })
+    .sort({ _id: -1 })
+    .then((activities) => {
+      res.json({ message: "succes", activities: activities });
     })
     .catch((error) => {
-      console.log(error);
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
     });
 };

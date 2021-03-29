@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+const { LIKE } = require("../constant/activityType");
+
 const User = require("../model/user");
 const Feed = require("../model/feed");
 const Follow = require("../model/follow");
@@ -115,7 +117,8 @@ exports.increaseLike = (req, res, next) => {
       const activity = new Activity({
         whoId: userId,
         whomId: feed.userId.toString(),
-        activityType: "like",
+        feedId: feedId,
+        activityType: LIKE,
       });
       return activity.save();
     })
