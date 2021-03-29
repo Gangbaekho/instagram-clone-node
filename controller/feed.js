@@ -4,6 +4,7 @@ const User = require("../model/user");
 const Feed = require("../model/feed");
 const Follow = require("../model/follow");
 const Reply = require("../model/reply");
+const Activity = require("../model/activity");
 
 exports.createFeed = (req, res, next) => {
   const userId = req.userId;
@@ -111,6 +112,14 @@ exports.increaseLike = (req, res, next) => {
       return feed.save();
     })
     .then((feed) => {
+      const activity = new Activity({
+        whoId: userId,
+        whomId: feed.userId.toString(),
+        activityType: "like",
+      });
+      return activity.save();
+    })
+    .then((result) => {
       res.json({ message: "like increase success" });
     })
     .catch((error) => {
