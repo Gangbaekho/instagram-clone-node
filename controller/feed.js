@@ -191,21 +191,7 @@ exports.getFeedsV2 = (req, res, next) => {
       const followeeList = followInfos.map(
         (followInfo) => followInfo.followeeId
       );
-      //   Feed.find()
-      // .populate({ path: "replyIds", perDocumentLimit: 2 })
-      // .sort({ createdAt: -1 })
-      // .then((feeds) => {
-      //   res.json({
-      //     message: "success",
-      //     feeds: feeds.map((feed) => {
-      //       isHeartClicked = feed.likeUserIds.indexOf(userId) > -1;
-      //       return {
-      //         ...feed._doc,
-      //         isHeartClicked: isHeartClicked,
-      //       };
-      //     }),
-      //   });
-      // })
+
       return Feed.find({ userId: { $in: followeeList } })
         .populate({ path: "replyIds", perDocumentLimit: 2 })
         .sort({ _id: -1 });
