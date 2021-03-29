@@ -1,4 +1,5 @@
 const Follow = require("../model/follow");
+const Activity = require("../model/activity");
 
 exports.addFollowRelationship = (req, res, next) => {
   const userId = req.userId;
@@ -8,6 +9,14 @@ exports.addFollowRelationship = (req, res, next) => {
 
   follow
     .save()
+    .then((result) => {
+      const activity = new Activity({
+        whoId: userId,
+        whomId: followeeId,
+        activityType: "follow",
+      });
+      return activity.save();
+    })
     .then((result) => {
       res.json({ message: "follow success" });
     })

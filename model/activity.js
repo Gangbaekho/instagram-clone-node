@@ -30,4 +30,6 @@ const activitySchema = new Schema(
   { timestamps: true }
 );
 
+activitySchema.index({ createdAt: 1 });
+
 module.exports = mongoose.model("Acitivity", activitySchema);
