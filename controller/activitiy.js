@@ -8,7 +8,7 @@ exports.getActivities = (req, res, next) => {
     .limit(20)
     .populate("feedId")
     .populate("replyId")
-    .populate("whomId")
+    .populate("whoId")
     .then((activities) => {
       res.json({ message: "succes", activities: activities });
     })
