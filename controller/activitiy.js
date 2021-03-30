@@ -8,6 +8,7 @@ exports.getActivities = (req, res, next) => {
     .limit(20)
     .populate("feedId")
     .populate("replyId")
+    .populate("whomId")
     .then((activities) => {
       res.json({ message: "succes", activities: activities });
     })
