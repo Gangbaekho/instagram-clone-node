@@ -31,7 +31,24 @@ exports.getConversations = (req, res, next) => {
   Conversation.find({ talkers: userId })
     .populate("talkers", "nickName profileImageUrl")
     .then((conversations) => {
-      res.json({ message: "success", conversations: conversations });
+      let filteredTalkers = [];
+
+      if (!conversations) {
+        return res.json({ message: "success", talkers: filteredTalkers });
+      }
+
+      conversations.forEach((conversation) => {
+        conversation.talkers.forEach((talker) => {
+          if (talker._id.toString() !== userId) {
+            filteredTalkers.push(talker);
+          }
+        });
+      });
+
+      res.json({
+        message: "success",
+        conversations: filteredTalkers,
+      });
     })
     .catch((error) => {
       if (!error.statusCode) {
