@@ -4,13 +4,21 @@ const Schema = mongoose.Schema;
 
 const dmSchema = new Schema(
   {
-    userId: {
+    fromId: {
       type: Schema.Types.ObjectId,
       ref: "User",
+      required: true,
+    },
+    toId: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
     message: {
       type: String,
-      required: true,
+    },
+    imageUrl: {
+      type: String,
     },
   },
   { timestamps: true }
