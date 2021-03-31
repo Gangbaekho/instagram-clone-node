@@ -1,17 +1,26 @@
 const Conversation = require("../model/conversation");
 
 exports.createConversation = (req, res, next) => {
-  const conversation = new Conversation({
-    talkers: ["60459cb019ffd74380d5b4ca", "6045a7f8330ee40f98207c6a"],
-    dms: ["6045ae91e9181838f0a0a723", "6045ae91e9181838f0a0a723"],
-  });
+  const fromId = req.userId;
+  const toId = req.body.toId;
 
-  conversation
-    .save()
-    .then((result) => {
-      console.log("Conversation insert success");
+  Conversation.findOne({ talkers: { $all: [fromId, toId] } })
+    .then((cs) => {
+      if (cs) {
+        const error = new Error("already exist conversation.");
+        error.statusCode = 500;
+        throw error;
+      }
+      const conversation = new Conversation({ talkers: [fromId, toId] });
+      return conversation.save();
+    })
+    .then((conversation) => {
+      res.json({ message: "success", conversation: conversation });
     })
     .catch((error) => {
-      console.log(error);
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
     });
 };
