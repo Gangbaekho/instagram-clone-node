@@ -6,6 +6,6 @@ const router = express.Router();
 
 const isAuth = require("../middleware/isAuth");
 
-router.post("/", isAuth, dmController.createDm);
+router.post("/text", isAuth, dmController.createDmText);
 
 module.exports = router;

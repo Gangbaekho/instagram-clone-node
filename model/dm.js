@@ -1,10 +1,11 @@
 const mongoose = require("mongoose");
+const { TEXT, IMAGE } = require("../constant/messageType");
 
 const Schema = mongoose.Schema;
 
 const dmSchema = new Schema(
   {
-    converationId: {
+    conversationId: {
       type: Schema.Types.ObjectId,
       ref: "Conversation",
       required: true,
@@ -21,9 +22,10 @@ const dmSchema = new Schema(
     },
     messageType: {
       type: String,
+      enum: [TEXT, IMAGE],
       required: true,
     },
-    message: {
+    text: {
       type: String,
     },
     imageUrl: {
