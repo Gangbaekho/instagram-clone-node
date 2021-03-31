@@ -4,11 +4,12 @@ const Schema = mongoose.Schema;
 
 const conversationSchema = new Schema(
   {
-    talkers: {
-      type: [Schema.Types.ObjectId],
-      ref: "User",
-      required: true,
-    },
+    talkers: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   { timestamps: true }
 );

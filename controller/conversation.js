@@ -29,6 +29,7 @@ exports.getConversations = (req, res, next) => {
   const userId = req.userId;
 
   Conversation.find({ talkers: userId })
+    .populate("talkers", "nickName profileImageUrl")
     .then((conversations) => {
       res.json({ message: "success", conversations: conversations });
     })
