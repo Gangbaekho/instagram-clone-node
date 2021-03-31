@@ -24,3 +24,18 @@ exports.createConversation = (req, res, next) => {
       next(error);
     });
 };
+
+exports.getConversations = (req, res, next) => {
+  const userId = req.userId;
+
+  Conversation.find({ talkers: userId })
+    .then((conversations) => {
+      res.json({ message: "success", conversations: conversations });
+    })
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
+};

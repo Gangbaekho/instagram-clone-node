@@ -8,4 +8,6 @@ const isAuth = require("../middleware/isAuth");
 
 router.post("/", isAuth, conversationController.createConversation);
 
+router.get("/", isAuth, conversationController.getConversations);
+
 module.exports = router;
